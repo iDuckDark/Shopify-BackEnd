@@ -67,18 +67,19 @@ public class MainActivity extends AppCompatActivity {
                 //find the keys associated
                 String ID = o.getString("id");
                 String data = o.getString("data");
-                //JSONArray childJSONArray = o.getJSONArray("child_ids");
-                JSONArray arr = o.getJSONArray("child_ids");
-                test.setText(arr.toString());
-                if(i==1){
-                    test.setText(arr);
-                    break;
+
+                JSONArray arrJson = o.getJSONArray("child_ids");
+
+                String arr =arrJson.toString();
+                String[] arrID = arr.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
+                ArrayList<String> childList = new ArrayList<>();
+                for(int j=0; j<arrID.length; j++){
+                    childList.add(arrID[j]);
                 }
-                //Menu newMenu = new Menu(ID,data,childList);
-                //menus.add(newMenu);
+
+                Menu newMenu = new Menu(ID,data,childList);
+                menus.add(newMenu);
             }
-
-
         }
         catch(JSONException e){
             test.setText("Failed: "+ e);
