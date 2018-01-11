@@ -53,25 +53,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //https://stackoverflow.com/questions/7646392/convert-string-to-int-array-in-java
-
-    private void readJson() {
+    private void readJson(String bodyResponse) {
         try {
-            JSONObject jsonObj1 = new JSONObject(bodyResponse1);
-            //String title = (String) jsonObj.get("title");
-            JSONArray arr1 = jsonObj1.getJSONArray("menus");
-            menus = new ArrayList<Menu>();
-            //String title ="";
-            for (int i = 0; i < arr1.length(); i++) {
+            JSONObject jsonObj = new JSONObject(bodyResponse);
+
+            JSONArray arr = jsonObj.getJSONArray("menus");
+
+
+            for (int i = 0; i < arr.length(); i++) {
                 //create entire object of JSON file at index i
-                JSONObject o = arr1.getJSONObject(i);
+                JSONObject o = arr.getJSONObject(i);
                 //find the keys associated
                 String ID = o.getString("id");
                 String data = o.getString("data");
 
                 JSONArray arrJson = o.getJSONArray("child_ids");
 
-                String arr =arrJson.toString();
-                String[] arrID = arr.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
+                String arrBefore =arrJson.toString();
+                String[] arrID = arrBefore.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
                 ArrayList<String> childList = new ArrayList<>();
                 for(int j=0; j<arrID.length; j++){
                     childList.add(arrID[j]);
@@ -80,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
                 Menu newMenu = new Menu(ID,data,childList);
                 menus.add(newMenu);
             }
-            test.setText(menus.get(1).toString());
         }
         catch(JSONException e){
             test.setText("Failed: "+ e);
@@ -118,8 +116,12 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(result);
             //showDialog("Downloaded " + result + " bytes");
             if (result != null) {
-                test.setText(bodyResponse1);
-                readJson();
+                menus = new ArrayList<Menu>();
+                readJson(bodyResponse1);
+                readJson(bodyResponse2);
+                readJson(bodyResponse3);
+                test.setText(Integer.toString(menus.size()));
+
             }
         }
 
