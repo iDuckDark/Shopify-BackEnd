@@ -11,29 +11,32 @@ public class Menu {
 
     String id;
     String data;
+    int parentID;
     ArrayList<String> childIDList;
-    ArrayList<String> parentIDList;
 
     Menu(String id, String data){
         this.id = id;
         this.data = data;
+        parentID = -1;
         childIDList =  new ArrayList<String>();
-        parentIDList = new ArrayList<String>();
     }
-    Menu(String id, String data, ArrayList<String> childIDList, ArrayList<String> parentIDList){
+    Menu(String id, String data, int parentID, ArrayList<String> childIDList){
         this.id = id;
         this.data = data;
+        this.parentID = parentID;
         this.childIDList = childIDList;
-        this.parentIDList = parentIDList;
     }
 
     public String toString(){ String s="";
-        System.out.println(parentIDList.toString());
+        System.out.println(parentID);
         System.out.println(childIDList.toString());
 
         s += " ID : " + id +'\n';
         s += " data: " + data +'\n';
-        s += " parent_id: " + parentIDList.toString();
+
+        if (parentID != -1)
+            s += " parent_id: " + parentID;
+
         s += " child_id: " + childIDList.toString();
         return  s;
     }
@@ -50,11 +53,8 @@ public class Menu {
     protected void addChildID(String childID){
         childIDList.add(childID);
     }
-    protected void setParentID(ArrayList<String> parentIDList){
-        this.parentIDList = parentIDList;
-    }
-    protected void AddParentID(String parentIDList){
-        this.parentIDList.add(parentIDList);
+    protected void setParentID(int parentID){
+        this.parentID = parentID;
     }
     protected String getId(){
         return id;
@@ -65,5 +65,5 @@ public class Menu {
     protected ArrayList<String> getChildIDList(){
         return childIDList;
     }
-    protected ArrayList<String> getParentIDList() { return parentIDList; }
+    protected int getParentID() { return parentID; }
 }
