@@ -75,12 +75,18 @@ public class MainActivity extends AppCompatActivity {
 
                 String arrBefore =arrJson.toString();
                 String[] arrID = arrBefore.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
+
+                ArrayList<String> parentList = new ArrayList<>();
+                for(int j=0; j<arrID.length; j++){
+                    parentList.add(arrID[j]);
+                }
+
                 ArrayList<String> childList = new ArrayList<>();
                 for(int j=0; j<arrID.length; j++){
                     childList.add(arrID[j]);
                 }
 
-                Menu newMenu = new Menu(ID,data,childList);
+                Menu newMenu = new Menu(ID , data, childList, parentList);
                 menus.add(newMenu);
             }
         }
