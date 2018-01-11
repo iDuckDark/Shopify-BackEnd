@@ -13,7 +13,9 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.HashMap;
+import java.util.Stack;
 import java.util.Map;
 
 import okhttp3.OkHttpClient;
@@ -104,6 +106,67 @@ public class MainActivity extends AppCompatActivity {
         return arrBefore.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
     }
 
+    private void validateGraph() {
+        Map<String, Integer> visited = new HashMap<>();
+        Stack<Integer> itemsStack = new Stack<>();
+        ArrayList<String> childList = null;
+
+        // Find first item with child.
+        for (int i = 0; i < menus.size(); i++) {
+            if (!menus.get(i).childIDList.isEmpty()) {
+                childList = menus.get(i).childIDList;
+                break;
+            }
+        }
+
+        if (childList != null) {
+            int currentID = 0;
+
+            /*
+            // Push all children.
+            for (int i = 0; i < childList.size(); i++) {
+                itemsStack.push(Integer.parseInt(childList.get(i)));
+            }
+
+            visited.put(menus.get(currentID).getData(), 1);
+            */
+
+            // Check children
+            do {
+                System.out.println("CID: " + currentID);
+
+                // Check if child was previously visited.
+                if (visited.get(menus.get(currentID)) != null && visited.get(menus.get(currentID).getData()) > 0) {
+                    // Invalid.
+                    setInvalidMenu(currentID);
+                    System.out.println("Invalid menu: " + currentID);
+                    break;
+                }
+
+                // Push all children.
+                childList = menus.get(currentID).childIDList;
+                for (int i = 0; i < childList.size(); i++) {
+                    System.out.println("CL: " + menus.get(currentID).toString());
+                    System.out.println("CL: " + childList.toString());
+                    itemsStack.push(Integer.parseInt(childList.get(i)));
+                }
+
+                currentID = itemsStack.pop();
+                visited.put(menus.get(currentID).getData(), 1);
+            } while (!itemsStack.empty());
+        }
+
+        for (int i = 0; i < menus.size(); i++) {
+            System.out.println("item: " + menus.get(i).getData());
+            System.out.println("visited: " + visited.get(menus.get(i)));
+        }
+    }
+
+    // Sets the menu of an item id invalid.
+    private void setInvalidMenu(int id) {
+
+    }
+
     private class DownloadFilesTask extends AsyncTask<String, Integer, String> {
 
         protected String doInBackground(String... urls) {
@@ -140,8 +203,7 @@ public class MainActivity extends AppCompatActivity {
                 readJson(bodyResponse2);
                 readJson(bodyResponse3);
                 test.setText(menus.toString());
-
-
+                validateGraph();
             }
         }
 
