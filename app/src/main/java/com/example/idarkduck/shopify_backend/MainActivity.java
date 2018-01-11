@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 if (o.length() == 4)
                     parentID = o.getInt("parent_id");
 
-                ArrayList<String> childList = new ArrayList<>();
+                ArrayList<Integer> childList = new ArrayList<>();
 
                 // Get ids.
                 JSONArray arrChildJson = o.getJSONArray("child_ids");
@@ -87,12 +87,13 @@ public class MainActivity extends AppCompatActivity {
                     String[] arrID = parseJsonArray(arrChildJson);
 
                     for (int j = 0; j < arrID.length; j++) {
-                        childList.add(arrID[j]);
+                        if (!arrID[j].isEmpty())
+                            childList.add(Integer.parseInt(arrID[j]));
                     }
                 }
 
                 // Update menu.
-                Menu newMenu = new Menu(ID , data, parentID, childList);
+                Menu newMenu = new Menu(ID, data, parentID, childList);
                 menus.add(newMenu);
             }
         }
@@ -107,9 +108,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void validateGraph() {
-        Map<String, Integer> visited = new HashMap<>();
+        Map<String, Integer> visited = new HashMap<>(menus.size());
         Stack<Integer> itemsStack = new Stack<>();
-        ArrayList<String> childList = null;
+        ArrayList<Integer> childList = null;
 
         // Find first item with child.
         for (int i = 0; i < menus.size(); i++) {
@@ -121,6 +122,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (childList != null) {
             int currentID = 0;
+            itemsStack.push(currentID);
 
             /*
             // Push all children.
@@ -133,10 +135,15 @@ public class MainActivity extends AppCompatActivity {
 
             // Check children
             do {
+                currentID = itemsStack.pop();
+                // Initialize visited.
+                if (menus.size() < currentID || visited.get(menus.get(currentID)) == null)
+                    visited.put(menus.get(currentID).getData(), 0);
+
                 System.out.println("CID: " + currentID);
 
                 // Check if child was previously visited.
-                if (visited.get(menus.get(currentID)) != null && visited.get(menus.get(currentID).getData()) > 0) {
+                if (visited.get(menus.get(currentID).getData()) > 0) {
                     // Invalid.
                     setInvalidMenu(currentID);
                     System.out.println("Invalid menu: " + currentID);
@@ -145,13 +152,15 @@ public class MainActivity extends AppCompatActivity {
 
                 // Push all children.
                 childList = menus.get(currentID).childIDList;
+                System.out.println("CL: " + menus.get(currentID).toString());
+                System.out.println("CL: " + childList.toString());
                 for (int i = 0; i < childList.size(); i++) {
-                    System.out.println("CL: " + menus.get(currentID).toString());
-                    System.out.println("CL: " + childList.toString());
-                    itemsStack.push(Integer.parseInt(childList.get(i)));
+
+                    System.out.println("CL: " + (childList.get(i)));
+                    itemsStack.push(childList.get(i) - 1);
                 }
 
-                currentID = itemsStack.pop();
+                System.out.println("stack size: " + itemsStack.size());
                 visited.put(menus.get(currentID).getData(), 1);
             } while (!itemsStack.empty());
         }
