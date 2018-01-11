@@ -71,16 +71,18 @@ public class MainActivity extends AppCompatActivity {
                 String ID = o.getString("id");
                 String data = o.getString("data");
 
-                JSONArray arrJson = o.getJSONArray("child_ids");
+                JSONArray arrParentJson = o.getJSONArray("parent_id");
+                JSONArray arrChildJson = o.getJSONArray("child_ids");
 
-                String arrBefore =arrJson.toString();
-                String[] arrID = arrBefore.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
+                String[] arrID = parseJsonArray(arrParentJson);
 
                 ArrayList<String> parentList = new ArrayList<>();
                 for(int j=0; j<arrID.length; j++){
                     parentList.add(arrID[j]);
                 }
 
+                arrID = parseJsonArray(arrChildJson);
+                
                 ArrayList<String> childList = new ArrayList<>();
                 for(int j=0; j<arrID.length; j++){
                     childList.add(arrID[j]);
@@ -93,6 +95,11 @@ public class MainActivity extends AppCompatActivity {
         catch(JSONException e){
             test.setText("Failed: "+ e);
         }
+    }
+
+    private String[] parseJsonArray(JSONArray jsonArray) {
+        String arrBefore = jsonArray.toString();
+        return arrBefore.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
     }
 
     private class DownloadFilesTask extends AsyncTask<String, Integer, String> {
