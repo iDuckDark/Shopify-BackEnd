@@ -13,6 +13,8 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import okhttp3.OkHttpClient;
 
@@ -21,12 +23,11 @@ public class MainActivity extends AppCompatActivity {
     String bodyResponse1;
     String bodyResponse2;
     String bodyResponse3;
-    //String bodyResponse4;
 
     String address1 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=1";
     String address2 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=2";
     String address3 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=3";
-    //String address4 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=4";
+
 
     OkHttpClient client;
 
@@ -48,9 +49,12 @@ public class MainActivity extends AppCompatActivity {
         download.execute(address1);
 
         id = new ArrayList<>();
+    }
 
+    private void find(){
 
     }
+
 
     //https://stackoverflow.com/questions/7646392/convert-string-to-int-array-in-java
     private void readJson(String bodyResponse) {
