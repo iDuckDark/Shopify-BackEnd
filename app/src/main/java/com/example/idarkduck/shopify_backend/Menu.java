@@ -20,6 +20,12 @@ public class Menu {
     Menu(String id, String data, ArrayList<String> childID){
         this.id=id; this.data=data; this.childIDList=childID;
     }
+    public String toString(){ String s="";
+        s += " ID : " + id +'\n';
+        s += " data: " + data +'\n';
+        s += " child_id: " + childIDList.toString();
+        return  s;
+    }
     public void setId(String id){
         this.id=id;
     }

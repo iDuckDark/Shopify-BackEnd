@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 Menu newMenu = new Menu(ID,data,childList);
                 menus.add(newMenu);
             }
+            test.setText(menus.get(1).toString());
         }
         catch(JSONException e){
             test.setText("Failed: "+ e);
