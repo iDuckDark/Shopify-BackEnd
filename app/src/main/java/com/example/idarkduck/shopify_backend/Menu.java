@@ -12,17 +12,23 @@ public class Menu {
     String id;
     String data;
     ArrayList<String> childIDList;
+    ArrayList<String> parentIDList;
 
     Menu(String id, String data){
-        this.id=id; this.data=data;
+        this.id = id;
+        this.data = data;
         childIDList =  new ArrayList<String>();
+        parentIDList = new ArrayList<String>();
     }
     Menu(String id, String data, ArrayList<String> childID){
-        this.id=id; this.data=data; this.childIDList=childID;
+        this.id = id;
+        this.data = data;
+        this.childIDList = childID;
     }
     public String toString(){ String s="";
         s += " ID : " + id +'\n';
         s += " data: " + data +'\n';
+        s += " parent_id: " + parentIDList.toString();
         s += " child_id: " + childIDList.toString();
         return  s;
     }
