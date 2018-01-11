@@ -71,23 +71,38 @@ public class MainActivity extends AppCompatActivity {
                 String ID = o.getString("id");
                 String data = o.getString("data");
 
-                JSONArray arrParentJson = o.getJSONArray("parent_id");
+                // Get ids.
+                JSONArray arrParentJson = o.getJSONArray("child_ids");
                 JSONArray arrChildJson = o.getJSONArray("child_ids");
 
+                // Parse parent id data.
                 String[] arrID = parseJsonArray(arrParentJson);
-
                 ArrayList<String> parentList = new ArrayList<>();
-                for(int j=0; j<arrID.length; j++){
+
+                System.out.println("hi");
+                System.out.println(arrID.length);
+
+
+                for(int j = 0; j < arrID.length; j++){
                     parentList.add(arrID[j]);
                 }
 
+                System.out.println(arrID.toString());
+
+
+                // Parse child id data.
                 arrID = parseJsonArray(arrChildJson);
-                
+
+
                 ArrayList<String> childList = new ArrayList<>();
-                for(int j=0; j<arrID.length; j++){
+                for(int j = 0; j < arrID.length; j++){
                     childList.add(arrID[j]);
                 }
 
+                System.out.println(parentList.toString());
+                System.out.println(childList.toString());
+
+                // Update menu.
                 Menu newMenu = new Menu(ID , data, childList, parentList);
                 menus.add(newMenu);
             }

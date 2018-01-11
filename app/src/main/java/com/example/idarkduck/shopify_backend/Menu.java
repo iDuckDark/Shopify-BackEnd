@@ -28,6 +28,9 @@ public class Menu {
     }
 
     public String toString(){ String s="";
+        System.out.println(parentIDList.toString());
+        System.out.println(childIDList.toString());
+
         s += " ID : " + id +'\n';
         s += " data: " + data +'\n';
         s += " parent_id: " + parentIDList.toString();
