@@ -26,6 +26,7 @@ public class Menu {
         this.childIDList = childIDList;
         this.parentIDList = parentIDList;
     }
+
     public String toString(){ String s="";
         s += " ID : " + id +'\n';
         s += " data: " + data +'\n';
@@ -33,32 +34,33 @@ public class Menu {
         s += " child_id: " + childIDList.toString();
         return  s;
     }
-    public void setId(String id){
+
+    protected void setId(String id){
         this.id=id;
     }
-    public void setData(String data){
+    protected void setData(String data){
         this.data=data;
     }
-    public void setChildID(ArrayList<String> childIDList){
+    protected void setChildID(ArrayList<String> childIDList){
         this.childIDList=childIDList;
     }
-    public void addChildID(String childID){
+    protected void addChildID(String childID){
         childIDList.add(childID);
     }
-    public void setParentID(ArrayList<String> parentIDList){
+    protected void setParentID(ArrayList<String> parentIDList){
         this.parentIDList = parentIDList;
     }
-    public void AddParentID(String parentIDList){
+    protected void AddParentID(String parentIDList){
         this.parentIDList.add(parentIDList);
     }
-    public String getId(){
+    protected String getId(){
         return id;
     }
-    public String getData(){
+    protected String getData(){
         return data;
     }
-    public ArrayList<String> getChildIDList(){
+    protected ArrayList<String> getChildIDList(){
         return childIDList;
     }
-    public ArrayList<String> getParentIDList() { return parentIDList; }
+    protected ArrayList<String> getParentIDList() { return parentIDList; }
 }
