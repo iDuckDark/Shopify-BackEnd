@@ -124,7 +124,8 @@ public class MainActivity extends AppCompatActivity {
                 readJson(bodyResponse1);
                 readJson(bodyResponse2);
                 readJson(bodyResponse3);
-                test.setText(Integer.toString(menus.size()));
+                test.setText(menus.toString());
+
 
             }
         }

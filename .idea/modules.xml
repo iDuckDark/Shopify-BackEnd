@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Shopify-BackEnd.iml" filepath="$PROJECT_DIR$/Shopify-BackEnd.iml" />
+      <module fileurl="file://D:\Programming\Repos\Shopify-BackEnd\Shopify-BackEnd.iml" filepath="D:\Programming\Repos\Shopify-BackEnd\Shopify-BackEnd.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://D:\Programming\Repos\Shopify-BackEnd\app\app.iml" filepath="D:\Programming\Repos\Shopify-BackEnd\app\app.iml" />
     </modules>
   </component>
 </project>
