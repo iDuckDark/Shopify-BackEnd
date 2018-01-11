@@ -20,10 +20,11 @@ public class Menu {
         childIDList =  new ArrayList<String>();
         parentIDList = new ArrayList<String>();
     }
-    Menu(String id, String data, ArrayList<String> childID){
+    Menu(String id, String data, ArrayList<String> childIDList, ArrayList<String> parentIDList){
         this.id = id;
         this.data = data;
-        this.childIDList = childID;
+        this.childIDList = childIDList;
+        this.parentIDList = parentIDList;
     }
     public String toString(){ String s="";
         s += " ID : " + id +'\n';
@@ -44,6 +45,12 @@ public class Menu {
     public void addChildID(String childID){
         childIDList.add(childID);
     }
+    public void setParentID(ArrayList<String> parentIDList){
+        this.parentIDList = parentIDList;
+    }
+    public void AddParentID(String parentIDList){
+        this.parentIDList.add(parentIDList);
+    }
     public String getId(){
         return id;
     }
@@ -53,4 +60,5 @@ public class Menu {
     public ArrayList<String> getChildIDList(){
         return childIDList;
     }
+    public ArrayList<String> getParentIDList() { return parentIDList; }
 }
