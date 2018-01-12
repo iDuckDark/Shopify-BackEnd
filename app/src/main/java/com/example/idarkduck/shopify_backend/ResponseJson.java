@@ -51,7 +51,7 @@ public final class ResponseJson {
                     .put("valid_menus", valid)
                     .put("invalid_menus", invalid).toString();
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
@@ -77,7 +77,7 @@ public final class ResponseJson {
                     .put("valid_menus", valid)
                     .put("invalid_menus", invalid).toString();
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
@@ -92,7 +92,7 @@ public final class ResponseJson {
             invalid = new JSONArray();
             jsonString = new JSONObject()
                     .put("valid_menus", new JSONArray()).toString();
-        } catch (JSONException e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }

@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -21,6 +22,8 @@ import java.util.Stack;
 import okhttp3.OkHttpClient;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
+    private static int state = 1;
+
     OkHttpClient client;
     ResponseJson responseJson;
 
@@ -28,12 +31,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     String bodyResponse2;
     String bodyResponse3;
 
-    String address1 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=1";
-    String address2 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=2";
-    String address3 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=3";
+    String address = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=";
+    //String address2 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=2";
+    //String address3 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=3";
 
+    ListView listView;
     TextView loadingTextView;
     Button viewAnswers;
+    Switch aSwitch;
 
     ArrayList<String> id;
     ArrayList<Menu> menus;
@@ -55,9 +60,15 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         loadingTextView = (TextView) findViewById(R.id.loadingTextView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        aSwitch = findViewById(R.id.challenge);
 
-        DownloadFilesTask download = new DownloadFilesTask();
-        download.execute(address1);
+        if (state == 2) {
+            aSwitch.setChecked(true);
+            address = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=" + state + "&page=";
+        }
+
+        final DownloadFilesTask download = new DownloadFilesTask();
+        download.execute(address);
 
         id = new ArrayList<>();
 
@@ -69,6 +80,36 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 finish();
             }
         });
+
+        aSwitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               // /*
+                if(aSwitch.isChecked())
+                    state = 2;
+                else
+                    state = 1;
+
+                address = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=" + state +"&page=";
+
+                responseJson.clear();
+                menus = new ArrayList<>();
+
+
+                Runnable r = new DownloadFilesTask();
+                Thread t = new Thread(r);
+                t.start();
+
+                try {
+                    t.join();
+                } catch (Exception e) {
+                    System.out.println(e);
+                }
+
+                updateMenuAdapter();
+              //  */
+            }
+        });
     }
 
     // Validates graph on a thread.
@@ -76,11 +117,25 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     }
 
+    public void updateMenuAdapter(){
+
+        runOnUiThread(new Runnable(){
+            public void run(){
+
+                menuAdapter.notifyDataSetChanged();
+                menuAdapter = new MenuAdapter(getApplicationContext(), menus);
+
+                listView = (ListView) findViewById(R.id.lstItems);
+                listView.setAdapter(menuAdapter);
+            }
+        });
+    }
+
     private void setMenuAdapter() {
         //init adapters
         menuAdapter = new MenuAdapter(this, menus);
         // Attach the adapter to a ListView
-        ListView listView = (ListView) findViewById(R.id.lstItems);
+        listView = (ListView) findViewById(R.id.lstItems);
         listView.setAdapter(menuAdapter);
     }
 
@@ -183,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             ArrayList<Integer> childList = menus.get(key).getChildIDList();
             Stack<Integer> itemsStack = new Stack<>();
             int[] visited = new int[menus.size()];
+            boolean invalid = false;
 
             if (childList != null) {
                 int currentID = key;
@@ -196,40 +252,63 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     // Check if child was previously visited.
                     if (visited[currentID] > 0) {
                         // Invalid.
-                        responseJson.addInvalidMenu(menu);
-                        return;
+                        invalid = true;
                     }
-
-                    // Push all children.
-                    childList = menus.get(currentID).childIDList;
-                    for (int i = 0; i < childList.size(); i++) {
-                        itemsStack.push(childList.get(i) - 1);
+                    else {
+                        // Push all children.
+                        childList = menus.get(currentID).childIDList;
+                        for (int i = 0; i < childList.size(); i++) {
+                            itemsStack.push(childList.get(i) - 1);
+                        }
                     }
 
                     visited[currentID]++;
                 } while (!itemsStack.empty());
-                responseJson.addValidMenu(menu);
+                // Add menu to json.
+                if (invalid)
+                    responseJson.addInvalidMenu(menu);
+                else
+                    responseJson.addValidMenu(menu);
             }
         }
     }
 
-    private class DownloadFilesTask extends AsyncTask<String, Integer, String> {
+    private class DownloadFilesTask extends AsyncTask<String, Integer, String> implements Runnable {
+
+        ArrayList<String> bodyResponse = new ArrayList<>();
+
+        @Override
+        public void run() {
+            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+            doInBackground();
+            menus = new ArrayList<Menu>();
+
+            for (int i = 0; i < bodyResponse.size(); i++) {
+                readJson(bodyResponse.get(i));
+            }
+
+            validateGraphs();
+        }
 
         protected String doInBackground(String... urls) {
-            Downloader d1 = new Downloader(address1);
-            Downloader d2 = new Downloader(address2);
-            Downloader d3 = new Downloader(address3);
+            ArrayList<Downloader> downloaders = new ArrayList<>();
+
+            // Download pages.
+            for (int i = 1; i < 6; i++) {
+                downloaders.add(new Downloader(address + i));
+            }
 
             //added for progress bar
             for (int i = 0; i < 100; i++) {
                 publishProgress(i);
             }
-            //
-            bodyResponse1 = d1.getBodyRespose();
-            bodyResponse2 = d2.getBodyRespose();
-            bodyResponse3 = d3.getBodyRespose();
 
-            return d1.getBodyRespose();
+            // Get response.
+            for (int i = 0; i < downloaders.size(); i++) {
+                bodyResponse.add(downloaders.get(i).getBodyRespose());
+            }
+
+            return bodyResponse.get(0);
         }
 
         //Maybe need to be implemented to avoid crashes
@@ -243,9 +322,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             //showDialog("Downloaded " + result + " bytes");
             if (result != null) {
                 menus = new ArrayList<Menu>();
-                readJson(bodyResponse1);
-                readJson(bodyResponse2);
-                readJson(bodyResponse3);
+
+                for (int i = 0; i < bodyResponse.size(); i++) {
+                    readJson(bodyResponse.get(i));
+                }
 
                 validateGraphs();
 
