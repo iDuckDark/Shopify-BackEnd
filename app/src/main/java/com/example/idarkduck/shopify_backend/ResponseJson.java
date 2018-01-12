@@ -9,12 +9,14 @@ import org.json.JSONException;
  * Created by Nick-JR on 1/11/2018.
  */
 
-class ResponseJson {
+public final class ResponseJson {
+    private static volatile ResponseJson instance = null;
+
     String jsonString;
     JSONArray valid;
     JSONArray invalid;
 
-    public ResponseJson() {
+    private ResponseJson() {
         try {
             valid = new JSONArray();
             invalid = new JSONArray();
@@ -71,5 +73,18 @@ class ResponseJson {
         } catch (JSONException e) {
             System.out.println(e);
         }
+    }
+
+    // Returns singleton instance.
+    protected static ResponseJson getInstance() {
+        // Initalize instance.
+        if (instance == null){
+            synchronized (ResponseJson.class){
+                if (instance == null){
+                    instance = new ResponseJson();
+                }
+            }
+        }
+        return instance;
     }
 }

@@ -130,12 +130,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     // Executes worker thread to validate a graph.
     private class ValidateGraphTask implements Runnable {
-        ResponseJson json = new ResponseJson();
-
+        ResponseJson responseJson;
         private int key = 0;
 
         public ValidateGraphTask(int key) {
             this.key = key;
+            responseJson = responseJson.getInstance();
         }
 
         @Override
@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     // Check if child was previously visited.
                     if (visited[currentID] > 0) {
                         // Invalid.
-                        json.addInvalidMenu(menu);
+                        responseJson.addInvalidMenu(menu);
                         return;
                     }
 
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
                     visited[currentID]++;
                 } while (!itemsStack.empty());
-                json.addValidMenu(menu);
+                responseJson.addValidMenu(menu);
             }
         }
     }
