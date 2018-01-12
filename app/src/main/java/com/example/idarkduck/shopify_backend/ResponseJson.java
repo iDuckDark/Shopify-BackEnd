@@ -25,16 +25,25 @@ class ResponseJson {
 
     // Sets the menu of an item key valid.
     protected void addValidMenu(ArrayList<Menu> menu) {
+
+        /*System.out.println("RESPONSE");
+        for (int i  = 0; i < menu.size(); i++) {
+            System.out.println("Menu " + i + ": " + menu.get(i));
+        }
+        */
+
         try {
             valid.put("root_id", menu.get(0).getId());
             JSONArray children = new JSONArray();
 
+            System.out.println("menu size: " + menu.size());
             for (int i = 1; i < menu.size(); i++) {
-                children.put(i - 1, menu.get(i).getId());
+                children.put(menu.get(i).getId());
+                System.out.println("children" + children.toString());
             }
             valid.put("children", children);
 
-            jsonString = new JSONObject().put("valid_menus", valid).toString();
+            jsonString = new JSONObject().put("valid_menus", new JSONArray().put(valid)).toString();
 
 
             System.out.println(jsonString);

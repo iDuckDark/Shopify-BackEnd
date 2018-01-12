@@ -109,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     }
 
     private void validateGraphs() {
-
         ArrayList<Integer> roots = new ArrayList<>();
 
         // Find all roots.
@@ -119,43 +118,71 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 roots.add(i);
         }
 
+        System.out.println(roots.toString());
+
         // Validate each graph of the root.
-        for (int i = 0; i < roots.size(); i++) {
+        for (int i = 0; i < 1; i++) {
             // https://stackoverflow.com/questions/877096/how-can-i-pass-a-parameter-to-a-java-thread
-            Runnable r = new ValidateGraphTask(roots.get(i));
+            Runnable r = new ValidateGraphTask(roots.get(1));
             new Thread(r).start();
         }
     }
 
     // Returns a menu given the key of one of its items.
     private ArrayList<Menu> findMenu(int key) {
+        int[] visited = new int[menus.size()];
         ArrayList<Menu> menu = new ArrayList<>();
         Stack<Integer> itemsStack = new Stack<>();
 
         itemsStack.add(key);
-        int currentKey = -1;
+        int currentKey = key;
+        int prevKey = 0;
         boolean checkDone = false;
 
+        /*
+        for (int i = 0; i < menus.size(); i++) {
+            System.out.println("menu item " + i + ": " + menus.get(i));
+        }
+*/
+
+
+        // Follow parent path.
+        do {
+            currentKey = menus.get(currentKey).getParentID() - 1;
+
+            System.out.println("key: " + currentKey);
+
+            // Check if root is found.
+            if (currentKey < 0)
+                break;
+
+            // Add item to menu.
+            menu.add(menus.get(currentKey));
+
+        } while (!itemsStack.empty());
+
+        // Follow child connections.
         do {
             currentKey = itemsStack.pop();
             // Check if search is done.
             if (checkDone && currentKey == key)
                 break;
 
-            System.out.println("Key: " + currentKey);
-
             // Add item to menu.
             menu.add(menus.get(currentKey));
 
-            // Push all children.
+            // Push children.
             for (int i = 0; i < menus.get(currentKey).childIDList.size(); i++) {
                 itemsStack.push(menus.get(currentKey).childIDList.get(i) - 1);
             }
 
+            visited[currentKey]++;
             checkDone = true;
         } while (!itemsStack.empty());
 
-        System.out.println("Menu: " + menu.toString());
+        for (int i  = 0; i < menu.size(); i++) {
+            System.out.println("Menu " + i + ": " + menu.get(i));
+        }
 
         return menu;
     }
@@ -168,13 +195,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         public ValidateGraphTask(int key) {
             this.key = key;
-            System.out.println("WORKER THREAD: " + key);
         }
 
         @Override
         public void run() {
             android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
+            ArrayList<Menu> menu = new ArrayList<>();
             ArrayList<Integer> childList = menus.get(key).getChildIDList();
             Stack<Integer> itemsStack = new Stack<>();
             int[] visited = new int[menus.size()];
@@ -183,21 +210,17 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 int currentID = key;
                 itemsStack.push(currentID);
 
-                /*
-                // Initialize visited.
-                for (int i = 0; i < visited.length; i++) {
-                    visited[i] = 0;
-                }
-                */
-
                 // Check children
                 do {
                     currentID = itemsStack.pop();
 
+                    System.out.println("Current key: " + currentID);
+                    menu.add(menus.get(currentID));
+
                     // Check if child was previously visited.
                     if (visited[currentID] > 0) {
                         // Invalid.
-                        json.addInvalidMenu(findMenu(currentID));
+                        json.addInvalidMenu(menu);
                         return;
                     }
 
@@ -209,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
                     visited[currentID]++;
                 } while (!itemsStack.empty());
-                json.addValidMenu(findMenu(currentID));
+                json.addValidMenu(menu);
             }
         }
     }
