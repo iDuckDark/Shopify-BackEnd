@@ -18,6 +18,7 @@ public class Validator {
         this.menus=menus;
         validMenus_ID = new ArrayList<>();
         invalidMenus_ID = new ArrayList<>();
+        buildTree();
 
     }
     public ArrayList<String> validMenus_ID(){
