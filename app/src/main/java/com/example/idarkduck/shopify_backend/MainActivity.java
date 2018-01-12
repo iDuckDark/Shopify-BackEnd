@@ -115,10 +115,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     }
 
     private void validateGraphs() {
-        Map<String, Integer> visited = new HashMap<>(menus.size());
-        Stack<Integer> itemsStack = new Stack<>();
+
         ArrayList<Integer> roots = new ArrayList<>();
-        ArrayList<Integer> childList = null;
+
 
         // Find all roots.
         for (int i = 0; i < menus.size(); i++) {
@@ -154,6 +153,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         @Override
         public void run() {
             android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+
+            ArrayList<Integer> childList = null;
+            Map<String, Integer> visited = new HashMap<>(menus.size());
+            Stack<Integer> itemsStack = new Stack<>();
+
 
             // Find first item with child.
             for (int i = 0; i < menus.size(); i++) {
@@ -245,14 +249,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 readJson(bodyResponse2);
                 readJson(bodyResponse3);
                 test.setText(menus.toString());
-<<<<<<< HEAD
+
                 validateGraphs();
-=======
+
                 progressBar.setVisibility(View.GONE);
                 loadingTextView.setVisibility(View.GONE);
                 test.setVisibility(View.VISIBLE);
-                //validateGraph();
->>>>>>> 407016418198ca1b73df9a4e1458a9454c14a98e
             }
         }
 
