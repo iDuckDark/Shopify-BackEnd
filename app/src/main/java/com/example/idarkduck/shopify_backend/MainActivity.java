@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                         // Invalid.
                         setInvalidMenu(currentID);
                         System.out.println("Invalid menu: " + currentID);
-                        break;
+                        return;
                     }
 
                     // Push all children.
