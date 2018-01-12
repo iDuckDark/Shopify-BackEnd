@@ -131,8 +131,32 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     // Returns a menu given the key of one of its items.
     private ArrayList<Menu> findMenu(int key) {
         ArrayList<Menu> menu = new ArrayList<>();
+        Stack<Integer> itemsStack = new Stack<>();
 
+        itemsStack.add(key);
+        int currentKey = -1;
+        boolean checkDone = false;
 
+        do {
+            currentKey = itemsStack.pop();
+            // Check if search is done.
+            if (checkDone && currentKey == key)
+                break;
+
+            System.out.println("Key: " + currentKey);
+
+            // Add item to menu.
+            menu.add(menus.get(currentKey));
+
+            // Push all children.
+            for (int i = 0; i < menus.get(currentKey).childIDList.size(); i++) {
+                itemsStack.push(menus.get(currentKey).childIDList.get(i) - 1);
+            }
+
+            checkDone = true;
+        } while (!itemsStack.empty());
+
+        System.out.println("Menu: " + menu.toString());
 
         return menu;
     }
