@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         }
         catch(JSONException e){
             allItems.setText("Failed: "+ e);
+            answer.setText("Failed: "+ e);
         }
     }
 
@@ -217,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
             allItems.setText(" Loading ... ");
+            answer.setText(" Loading ... ");
             progressBar.setProgress(progress[0]);
         }
 
@@ -229,12 +231,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 readJson(bodyResponse2);
                 readJson(bodyResponse3);
                 allItems.setText(menus.toString());
+                answer.setText(menus.toString());
 
                 validateGraphs();
 
                 progressBar.setVisibility(View.GONE);
                 loadingTextView.setVisibility(View.GONE);
                 allItems.setVisibility(View.VISIBLE);
+                answer.setVisibility(View.VISIBLE);
             }
         }
 
