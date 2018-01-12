@@ -1,10 +1,12 @@
 package com.example.idarkduck.shopify_backend;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -30,12 +32,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     String address2 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=2";
     String address3 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=3";
 
-    TextView tv1;
-    TextView tv2;
-
-    TextView answer;
-    TextView allItems;
     TextView loadingTextView;
+    Button viewAnswers;
 
     ArrayList<String> id;
     ArrayList<Menu> menus;
@@ -51,12 +49,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         bodyResponse1="";
         client =  new OkHttpClient();
         responseJson = responseJson.getInstance();
+        responseJson.clear();
 
-        answer = (TextView) findViewById(R.id.answer);
-        allItems = (TextView) findViewById(R.id.all);
-
-        tv1= (TextView) findViewById(R.id.textView1);
-        tv2= (TextView) findViewById(R.id.textView2);
+        viewAnswers = findViewById(R.id.view_answers);
 
         loadingTextView = (TextView) findViewById(R.id.loadingTextView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -65,12 +60,22 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         download.execute(address1);
 
         id = new ArrayList<>();
+
+        viewAnswers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent results = new Intent(getApplicationContext(), AnswersActivity.class);
+                startActivity(results);
+                finish();
+            }
+        });
     }
 
     // Validates graph on a thread.
     public void run() {
 
     }
+
     private void setMenuAdapter() {
         //init adapters
         menuAdapter = new MenuAdapter(this, menus);
@@ -118,8 +123,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         }
         catch(JSONException e){
-            allItems.setText("Failed: "+ e);
-            answer.setText("Failed: "+ e);
+            System.out.println(e);
         }
     }
 
@@ -157,10 +161,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         }
 
-        responseJson.getResponse().toString();
-        // Display results.
-        answer.setText(responseJson.getResponse());
-        System.out.println("outside");
+        // Results ready.
+        viewAnswers.setVisibility(View.VISIBLE);
     }
 
     // Executes worker thread to validate a graph.
@@ -189,8 +191,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 // Check children
                 do {
                     currentID = itemsStack.pop();
-
-                    System.out.println("Current key: " + currentID);
                     menu.add(menus.get(currentID));
 
                     // Check if child was previously visited.
@@ -235,8 +235,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         //Maybe need to be implemented to avoid crashes
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
-            allItems.setText(" Loading ... ");
-            answer.setText(" Loading ... ");
             progressBar.setProgress(progress[0]);
         }
 
@@ -248,22 +246,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 readJson(bodyResponse1);
                 readJson(bodyResponse2);
                 readJson(bodyResponse3);
-                allItems.setText(menus.toString());
-                answer.setText(menus.toString());
 
                 validateGraphs();
 
                 progressBar.setVisibility(View.GONE);
                 loadingTextView.setVisibility(View.GONE);
-                allItems.setVisibility(View.VISIBLE);
-                answer.setVisibility(View.VISIBLE);
                 //allItems.setMovementMethod(new ScrollingMovementMethod());
                 setMenuAdapter();
-
-                allItems.setVisibility(View.INVISIBLE);
-                answer.setVisibility(View.INVISIBLE);
-                tv1.setVisibility(View.INVISIBLE);
-                tv2.setVisibility(View.INVISIBLE);
             }
         }
 

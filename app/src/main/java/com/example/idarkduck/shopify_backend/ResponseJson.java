@@ -13,9 +13,9 @@ import org.json.JSONException;
 public final class ResponseJson {
     private static volatile ResponseJson instance = null;
 
-    String jsonString;
-    JSONArray valid;
-    JSONArray invalid;
+    private String jsonString;
+    private JSONArray valid;
+    private JSONArray invalid;
 
     private ResponseJson() {
         try {
@@ -40,7 +40,6 @@ public final class ResponseJson {
             ArrayList<Integer> childList = new ArrayList<>();
             for (int i = 1; i < menu.size(); i++) {
                 childList.add(menu.get(i).getId());
-                System.out.println("children" + childList.toString());
             }
             // Sort.
             Collections.sort(childList);
@@ -52,7 +51,6 @@ public final class ResponseJson {
                     .put("valid_menus", valid)
                     .put("invalid_menus", invalid).toString();
 
-            System.out.println(jsonString);
         } catch (JSONException e) {
             System.out.println(e);
         }
@@ -68,7 +66,6 @@ public final class ResponseJson {
             ArrayList<Integer> childList = new ArrayList<>();
             for (int i = 1; i < menu.size(); i++) {
                 childList.add(menu.get(i).getId());
-                System.out.println("children" + childList.toString());
             }
             // Sort.
             Collections.sort(childList);
@@ -80,7 +77,6 @@ public final class ResponseJson {
                     .put("valid_menus", valid)
                     .put("invalid_menus", invalid).toString();
 
-            System.out.println(jsonString);
         } catch (JSONException e) {
             System.out.println(e);
         }
@@ -88,6 +84,17 @@ public final class ResponseJson {
 
     protected String getResponse() {
         return jsonString;
+    }
+
+    protected void clear() {
+        try {
+            valid = new JSONArray();
+            invalid = new JSONArray();
+            jsonString = new JSONObject()
+                    .put("valid_menus", new JSONArray()).toString();
+        } catch (JSONException e) {
+            System.out.println(e);
+        }
     }
 
     // Returns singleton instance.

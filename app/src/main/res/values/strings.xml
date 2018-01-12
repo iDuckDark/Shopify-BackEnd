@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Shopify-BackEnd</string>
+    <string name="title_activity_answers">AnswersActivity</string>
 </resources>
