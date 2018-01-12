@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
                 progressBar.setVisibility(View.GONE);
                 loadingTextView.setVisibility(View.GONE);
-                allItems.setVisibility(View.VISIBLE);
+                allItems.setVisibility(View.INVISIBLE);
                 answer.setVisibility(View.VISIBLE);
             }
         }
