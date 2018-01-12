@@ -17,6 +17,8 @@ import java.util.Stack;
 import okhttp3.OkHttpClient;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
+    OkHttpClient client;
+    ResponseJson responseJson;
 
     String bodyResponse1;
     String bodyResponse2;
@@ -26,8 +28,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     String address2 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=2";
     String address3 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=3";
 
-
-    OkHttpClient client;
     TextView answer;
     TextView allItems;
     TextView loadingTextView;
@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         bodyResponse1="";
         client =  new OkHttpClient();
-        allItems = (TextView) findViewById(R.id.all);
+        responseJson = responseJson.getInstance();
+        answer = (TextView) findViewById(R.id.answer);
         allItems = (TextView) findViewById(R.id.all);
         loadingTextView = (TextView) findViewById(R.id.loadingTextView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
@@ -59,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     public void run() {
 
     }
-
 
     //https://stackoverflow.com/questions/7646392/convert-string-to-int-array-in-java
     private void readJson(String bodyResponse) {
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         }
         catch(JSONException e){
-            test.setText("Failed: "+ e);
+            allItems.setText("Failed: "+ e);
         }
     }
 
@@ -119,14 +119,29 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 roots.add(i);
         }
 
-        System.out.println(roots.toString());
+        Thread[] threads = new Thread[roots.size()];
 
         // Validate each graph of the root.
         for (int i = 0; i < roots.size(); i++) {
             // https://stackoverflow.com/questions/877096/how-can-i-pass-a-parameter-to-a-java-thread
             Runnable r = new ValidateGraphTask(roots.get(i));
-            new Thread(r).start();
+            threads[i] = new Thread(r);
+            threads[i].start();
         }
+
+        // Wait for workers to finish.
+        for (int i = 0; i < threads.length; i++) {
+            try {
+                threads[i].join();
+            } catch (InterruptedException e) {
+                System.out.println(e);
+            }
+        }
+
+        responseJson.getResponse().toString();
+        // Display results.
+        answer.setText(responseJson.getResponse());
+        System.out.println("outside");
     }
 
     // Executes worker thread to validate a graph.
@@ -201,7 +216,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         //Maybe need to be implemented to avoid crashes
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
-            test.setText(" Loading ... ");
+            allItems.setText(" Loading ... ");
             progressBar.setProgress(progress[0]);
         }
 
@@ -213,13 +228,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 readJson(bodyResponse1);
                 readJson(bodyResponse2);
                 readJson(bodyResponse3);
-                test.setText(menus.toString());
+                allItems.setText(menus.toString());
 
                 validateGraphs();
 
                 progressBar.setVisibility(View.GONE);
                 loadingTextView.setVisibility(View.GONE);
-                test.setVisibility(View.VISIBLE);
+                allItems.setVisibility(View.VISIBLE);
             }
         }
 

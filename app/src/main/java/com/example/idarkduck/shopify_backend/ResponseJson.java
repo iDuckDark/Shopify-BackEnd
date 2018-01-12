@@ -86,6 +86,10 @@ public final class ResponseJson {
         }
     }
 
+    protected String getResponse() {
+        return jsonString;
+    }
+
     // Returns singleton instance.
     protected static ResponseJson getInstance() {
         // Initalize instance.
