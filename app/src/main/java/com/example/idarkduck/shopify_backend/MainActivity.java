@@ -6,18 +6,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Stack;
-import java.util.Map;
 
 import okhttp3.OkHttpClient;
 
@@ -118,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         ArrayList<Integer> roots = new ArrayList<>();
 
-
         // Find all roots.
         for (int i = 0; i < menus.size(); i++) {
             // Check if root.
@@ -126,24 +120,20 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 roots.add(i);
         }
 
-        System.out.print("roots: " + roots.size());
-        System.out.print("roots: " + roots.toString());
-
         // Validate each graph of the root.
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < roots.size(); i++) {
             // https://stackoverflow.com/questions/877096/how-can-i-pass-a-parameter-to-a-java-thread
             Runnable r = new ValidateGraphTask(roots.get(i));
             new Thread(r).start();
         }
     }
 
-    // Sets the menu of an item id invalid.
-    private void setInvalidMenu(int id) {
 
-    }
 
     // Executes worker thread to validate a graph.
     private class ValidateGraphTask implements Runnable {
+        ResponseJson json = new ResponseJson();
+
         private int key = 0;
 
         public ValidateGraphTask(int key) {
@@ -180,8 +170,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     // Check if child was previously visited.
                     if (visited[currentID] > 0) {
                         // Invalid.
-                        setInvalidMenu(currentID);
-                        System.out.println("Invalid menu: " + currentID);
+                        json.setInvalidMenu(currentID);
                         return;
                     }
 
@@ -199,6 +188,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     visited[currentID]++;
                     System.out.println("Visited1: " + visited[currentID]);
                 } while (!itemsStack.empty());
+                System.out.println("Valid menu: " + currentID);
             }
 
             for (int i = 0; i < menus.size(); i++) {
