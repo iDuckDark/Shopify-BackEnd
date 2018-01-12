@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     ArrayList<String> id;
     ArrayList<Menu> menus;
+    MenuAdapter menuAdapter;
 
     ProgressBar progressBar;
 
@@ -60,6 +62,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     // Validates graph on a thread.
     public void run() {
 
+    }
+    private void setMenuAdapter() {
+        //init adapters
+        menuAdapter = new MenuAdapter(this, menus);
+        // Attach the adapter to a ListView
+        ListView listView = (ListView) findViewById(R.id.lstItems);
+        listView.setAdapter(menuAdapter);
     }
 
     //https://stackoverflow.com/questions/7646392/convert-string-to-int-array-in-java
@@ -241,6 +250,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 allItems.setVisibility(View.VISIBLE);
                 answer.setVisibility(View.VISIBLE);
                 allItems.setMovementMethod(new ScrollingMovementMethod());
+                setMenuAdapter();
             }
         }
 
