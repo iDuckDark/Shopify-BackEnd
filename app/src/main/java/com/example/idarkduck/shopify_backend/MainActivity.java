@@ -201,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         //Maybe need to be implemented to avoid crashes
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
-            answer.setText(" Loading ... ");
+            //answer.setText(" Loading ... ");
             progressBar.setProgress(progress[0]);
         }
 
@@ -213,7 +213,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 readJson(bodyResponse1);
                 readJson(bodyResponse2);
                 readJson(bodyResponse3);
-                answer.setText(menus.toString());
+                //answer.setText(menus.toString());
 
                 validateGraphs();
 
