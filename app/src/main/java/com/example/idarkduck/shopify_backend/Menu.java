@@ -8,18 +8,18 @@ import java.util.ArrayList;
 
 public class Menu {
 
-    String id;
-    String data;
+    int id;
     int parentID;
+    String data;
     ArrayList<Integer> childIDList;
 
-    Menu(String id, String data){
+    Menu(int id, String data){
         this.id = id;
         this.data = data;
         parentID = -1;
         childIDList =  new ArrayList<>();
     }
-    Menu(String id, String data, int parentID, ArrayList<Integer> childIDList){
+    Menu(int id, String data, int parentID, ArrayList<Integer> childIDList){
         this.id = id;
         this.data = data;
         this.parentID = parentID;
@@ -37,8 +37,8 @@ public class Menu {
         return  s;
     }
 
-    protected void setId(String id){
-        this.id=id;
+    protected void setId(int id){
+        this.id = id;
     }
     protected void setData(String data){
         this.data=data;
@@ -52,7 +52,7 @@ public class Menu {
     protected void setParentID(int parentID){
         this.parentID = parentID;
     }
-    protected String getId(){
+    protected int getId(){
         return id;
     }
     protected String getData(){
