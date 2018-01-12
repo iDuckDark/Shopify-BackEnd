@@ -65,6 +65,16 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         return null;
     }
 
+    public boolean searchTreeNode(T searching) {
+        for (TreeNode<T> element : this.elementsIndex) {
+            T elData = element.data;
+            if ( searching.equals(elData) ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return data != null ? data.toString() : "[data null]";
