@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         System.out.print("roots: " + roots.toString());
 
         // Validate each graph of the root.
-        for (int i = 0; i < roots.size(); i++) {
+        for (int i = 0; i < 1; i++) {
             // https://stackoverflow.com/questions/877096/how-can-i-pass-a-parameter-to-a-java-thread
             Runnable r = new ValidateGraphTask(roots.get(i));
             new Thread(r).start();
@@ -148,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         public ValidateGraphTask(int key) {
             this.key = key;
+            System.out.println("WORKER THREAD: " + key);
         }
 
         @Override
@@ -155,35 +156,29 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
             ArrayList<Integer> childList = null;
-            Map<String, Integer> visited = new HashMap<>(menus.size());
+            int[] visited = new int[menus.size()];
             Stack<Integer> itemsStack = new Stack<>();
 
-
-            // Find first item with child.
-            for (int i = 0; i < menus.size(); i++) {
-                if (!menus.get(i).childIDList.isEmpty()) {
-                    childList = menus.get(i).childIDList;
-                    break;
-                }
-            }
+            childList = menus.get(key).getChildIDList();
 
             if (childList != null) {
-                int currentID = 0;
+                int currentID = key;
                 itemsStack.push(currentID);
+
+                // Initialize visited.
+                for (int i = 0; i < visited.length; i++) {
+                    visited[i] = 0;
+                }
 
                 // Check children
                 do {
                     currentID = itemsStack.pop();
 
-                    // Initialize visited.
-                    if (menus.size() < currentID || visited.get(menus.get(currentID)) == null)
-                        visited.put(menus.get(currentID).getData(), 0);
-
                     System.out.println("CID: " + currentID);
-                    System.out.println("Visited: " + visited.get(menus.get(currentID).getData()));
+                    System.out.println("Visited: " + visited[currentID]);
 
                     // Check if child was previously visited.
-                    if (visited.get(menus.get(currentID).getData()) > 0) {
+                    if (visited[currentID] > 0) {
                         // Invalid.
                         setInvalidMenu(currentID);
                         System.out.println("Invalid menu: " + currentID);
@@ -201,14 +196,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     }
 
                     System.out.println("stack size: " + itemsStack.size());
-                    visited.put(menus.get(currentID).getData(), 1);
-                    System.out.println("Visited1: " + visited.get(menus.get(currentID).getData()));
+                    visited[currentID]++;
+                    System.out.println("Visited1: " + visited[currentID]);
                 } while (!itemsStack.empty());
             }
 
             for (int i = 0; i < menus.size(); i++) {
                 System.out.println("item: " + menus.get(i).getData());
-                System.out.println("visited: " + visited.get(menus.get(i)));
+                System.out.println("visited: " + visited[i]);
             }
         }
     }
