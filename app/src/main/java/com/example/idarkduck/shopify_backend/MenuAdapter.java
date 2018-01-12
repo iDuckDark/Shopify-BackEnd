@@ -62,7 +62,56 @@ public class MenuAdapter extends ArrayAdapter<Menu> {
             tvDescription.setText("ID: " + menu.getId() + " Children ID: " + menu.getChildIDList().toString());
         }
 
-        picture.setImageResource(R.drawable.chair);
+            if(position==0){
+                picture.setImageResource(R.drawable.house);
+            }
+            if(position==1){
+                picture.setImageResource(R.drawable.company);
+            }
+            if(position==2){
+                picture.setImageResource(R.drawable.livingroom);
+            }
+            if(position==3){
+                picture.setImageResource(R.drawable.meetingroom);
+            }
+            if(position==4){
+                picture.setImageResource(R.drawable.kitchen);
+            }
+            if(position==5){
+                picture.setImageResource(R.drawable.oven);
+            }
+            if(position==6){
+                picture.setImageResource(R.drawable.table);
+            }
+            if(position==7){
+                picture.setImageResource(R.drawable.hr);
+            }
+            if(position==8){
+                picture.setImageResource(R.drawable.computer);
+            }
+            if(position==9){
+                picture.setImageResource(R.drawable.cpu);
+            }
+            if(position==10){
+                picture.setImageResource(R.drawable.motherboard);
+            }
+            if(position==11){
+                picture.setImageResource(R.drawable.peripherals);
+            }
+            if(position==12){
+                picture.setImageResource(R.drawable.mouse);
+            }
+            if(position==13){
+                picture.setImageResource(R.drawable.keyboard);
+            }
+            if(position==14){
+                picture.setImageResource(R.drawable.chair);
+            }
+
+
+
+
+
         //Picasso.with(this.context).load(product.getImage()).into(picture);
 
         //added to search the product names?
