@@ -30,7 +30,10 @@ public class AnswersActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Project completed by Nevin WS Ganesan & Nicholas Broadbent", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, " Project completed by" +'\n' +
+                        " Nevin WS Ganesan & Nicholas Broadbent" +'\n'
+                       // "nevinganesan@hotmail.com & nbroa025@uottawa.ca"
+                        , Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
