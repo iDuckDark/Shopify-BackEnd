@@ -128,65 +128,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         }
     }
 
-    // Returns a menu given the key of one of its items.
-    private ArrayList<Menu> findMenu(int key) {
-        int[] visited = new int[menus.size()];
-        ArrayList<Menu> menu = new ArrayList<>();
-        Stack<Integer> itemsStack = new Stack<>();
-
-        itemsStack.add(key);
-        int currentKey = key;
-        int prevKey = 0;
-        boolean checkDone = false;
-
-        /*
-        for (int i = 0; i < menus.size(); i++) {
-            System.out.println("menu item " + i + ": " + menus.get(i));
-        }
-*/
-
-
-        // Follow parent path.
-        do {
-            currentKey = menus.get(currentKey).getParentID() - 1;
-
-            System.out.println("key: " + currentKey);
-
-            // Check if root is found.
-            if (currentKey < 0)
-                break;
-
-            // Add item to menu.
-            menu.add(menus.get(currentKey));
-
-        } while (!itemsStack.empty());
-
-        // Follow child connections.
-        do {
-            currentKey = itemsStack.pop();
-            // Check if search is done.
-            if (checkDone && currentKey == key)
-                break;
-
-            // Add item to menu.
-            menu.add(menus.get(currentKey));
-
-            // Push children.
-            for (int i = 0; i < menus.get(currentKey).childIDList.size(); i++) {
-                itemsStack.push(menus.get(currentKey).childIDList.get(i) - 1);
-            }
-
-            visited[currentKey]++;
-            checkDone = true;
-        } while (!itemsStack.empty());
-
-        for (int i  = 0; i < menu.size(); i++) {
-            System.out.println("Menu " + i + ": " + menu.get(i));
-        }
-
-        return menu;
-    }
-
     // Executes worker thread to validate a graph.
     private class ValidateGraphTask implements Runnable {
         ResponseJson json = new ResponseJson();
