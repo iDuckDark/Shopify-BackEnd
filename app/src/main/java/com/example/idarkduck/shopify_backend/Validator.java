@@ -38,6 +38,8 @@ public class Validator {
         }
     };
 
+    TreeNode<String> found = treeNode.findTreeNode(searchCriteria);
+
 
 
     }
