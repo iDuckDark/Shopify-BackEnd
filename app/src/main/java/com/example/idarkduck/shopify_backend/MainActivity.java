@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
 
     OkHttpClient client;
-
-    TextView test;
+    TextView answer;
+    TextView allItems;
     TextView loadingTextView;
 
     ArrayList<String> id;
@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         bodyResponse1="";
         client =  new OkHttpClient();
-        test = (TextView) findViewById(R.id.textView);
+        allItems = (TextView) findViewById(R.id.all);
+        allItems = (TextView) findViewById(R.id.all);
         loadingTextView = (TextView) findViewById(R.id.loadingTextView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 

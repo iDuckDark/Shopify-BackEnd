@@ -1,5 +1,6 @@
 package com.example.idarkduck.shopify_backend;
 
+import java.util.Collections;
 import java.util.ArrayList;
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -35,14 +36,18 @@ public final class ResponseJson {
             JSONObject jo = new JSONObject();
             jo.put("root_id", menu.get(0).getId());
 
-            System.out.println("menu size: " + menu.size());
+            // Get children.
+            ArrayList<Integer> childList = new ArrayList<>();
             for (int i = 1; i < menu.size(); i++) {
-                children.put(menu.get(i).getId());
-                System.out.println("children" + children.toString());
+                childList.add(menu.get(i).getId());
+                System.out.println("children" + childList.toString());
             }
-            jo.put("children", children);
-            valid.put(jo);
+            // Sort.
+            Collections.sort(childList);
 
+            // Put together.
+            jo.put("children", new JSONArray(childList));
+            valid.put(jo);
             jsonString = new JSONObject()
                     .put("valid_menus", valid)
                     .put("invalid_menus", invalid).toString();
@@ -59,18 +64,18 @@ public final class ResponseJson {
             JSONObject jo = new JSONObject();
             jo.put("root_id", menu.get(0).getId());
 
-
+            // Get children.
             ArrayList<Integer> childList = new ArrayList<>();
             for (int i = 1; i < menu.size(); i++) {
                 childList.add(menu.get(i).getId());
                 System.out.println("children" + childList.toString());
             }
+            // Sort.
+            Collections.sort(childList);
 
-
-            JSONArray children = new JSONArray();
-            jo.put("children", children);
+            // Put together
+            jo.put("children", new JSONArray(childList));
             invalid.put(jo);
-
             jsonString = new JSONObject()
                     .put("valid_menus", valid)
                     .put("invalid_menus", invalid).toString();
@@ -92,10 +97,5 @@ public final class ResponseJson {
             }
         }
         return instance;
-    }
-
-    private ArrayList<Integer> sortList(ArrayList<Integer> list) {
-        for (int i = 1; i < list.size(); i++) {
-        }
     }
 }
