@@ -128,7 +128,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         }
     }
 
+    // Returns a menu given the key of one of its items.
+    private ArrayList<Menu> findMenu(int key) {
+        ArrayList<Menu> menu = new ArrayList<>();
 
+
+
+        return menu;
+    }
 
     // Executes worker thread to validate a graph.
     private class ValidateGraphTask implements Runnable {
@@ -145,55 +152,41 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         public void run() {
             android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
 
-            ArrayList<Integer> childList = null;
-            int[] visited = new int[menus.size()];
+            ArrayList<Integer> childList = menus.get(key).getChildIDList();
             Stack<Integer> itemsStack = new Stack<>();
-
-            childList = menus.get(key).getChildIDList();
+            int[] visited = new int[menus.size()];
 
             if (childList != null) {
                 int currentID = key;
                 itemsStack.push(currentID);
 
+                /*
                 // Initialize visited.
                 for (int i = 0; i < visited.length; i++) {
                     visited[i] = 0;
                 }
+                */
 
                 // Check children
                 do {
                     currentID = itemsStack.pop();
 
-                    System.out.println("CID: " + currentID);
-                    System.out.println("Visited: " + visited[currentID]);
-
                     // Check if child was previously visited.
                     if (visited[currentID] > 0) {
                         // Invalid.
-                        json.setInvalidMenu(currentID);
+                        json.setInvalidMenu(findMenu(currentID));
                         return;
                     }
 
                     // Push all children.
                     childList = menus.get(currentID).childIDList;
-                    System.out.println("CL: " + menus.get(currentID).toString());
-                    System.out.println("CL: " + childList.toString());
                     for (int i = 0; i < childList.size(); i++) {
-
-                        System.out.println("CL: " + (childList.get(i)));
                         itemsStack.push(childList.get(i) - 1);
                     }
 
-                    System.out.println("stack size: " + itemsStack.size());
                     visited[currentID]++;
-                    System.out.println("Visited1: " + visited[currentID]);
                 } while (!itemsStack.empty());
-                System.out.println("Valid menu: " + currentID);
-            }
-
-            for (int i = 0; i < menus.size(); i++) {
-                System.out.println("item: " + menus.get(i).getData());
-                System.out.println("visited: " + visited[i]);
+                json.setValidMenu(findMenu(currentID));
             }
         }
     }
