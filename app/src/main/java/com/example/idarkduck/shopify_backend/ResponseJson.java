@@ -43,8 +43,9 @@ public final class ResponseJson {
             jo.put("children", children);
             valid.put(jo);
 
-            jsonString = new JSONObject().put("valid_menus", valid).toString();
-
+            jsonString = new JSONObject()
+                    .put("valid_menus", valid)
+                    .put("invalid_menus", invalid).toString();
 
             System.out.println(jsonString);
         } catch (JSONException e) {
@@ -57,17 +58,22 @@ public final class ResponseJson {
         try {
             JSONObject jo = new JSONObject();
             jo.put("root_id", menu.get(0).getId());
-            JSONArray children = new JSONArray();
 
-            System.out.println("menu size: " + menu.size());
+
+            ArrayList<Integer> childList = new ArrayList<>();
             for (int i = 1; i < menu.size(); i++) {
-                children.put(menu.get(i).getId());
-                System.out.println("children" + children.toString());
+                childList.add(menu.get(i).getId());
+                System.out.println("children" + childList.toString());
             }
+
+
+            JSONArray children = new JSONArray();
             jo.put("children", children);
             invalid.put(jo);
 
-            jsonString = new JSONObject().put("invalid_menus", invalid).toString();
+            jsonString = new JSONObject()
+                    .put("valid_menus", valid)
+                    .put("invalid_menus", invalid).toString();
 
             System.out.println(jsonString);
         } catch (JSONException e) {
@@ -86,5 +92,10 @@ public final class ResponseJson {
             }
         }
         return instance;
+    }
+
+    private ArrayList<Integer> sortList(ArrayList<Integer> list) {
+        for (int i = 1; i < list.size(); i++) {
+        }
     }
 }

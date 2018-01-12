@@ -202,7 +202,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             super.onProgressUpdate(progress);
             test.setText(" Loading ... ");
             progressBar.setProgress(progress[0]);
-            //setProgressPercent(progress[0]);
         }
 
         protected void onPostExecute(String result) {
@@ -220,10 +219,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 progressBar.setVisibility(View.GONE);
                 loadingTextView.setVisibility(View.GONE);
                 test.setVisibility(View.VISIBLE);
-//                Validator v = new Validator(menus);
-//                String s = "invalid:" + v.getInvalidMenus_ID().toString() +'\n';
-//                s+= "valid:" + v.getValidMenus_ID().toString() +'\n';
-//                test.setText(s);
             }
         }
 

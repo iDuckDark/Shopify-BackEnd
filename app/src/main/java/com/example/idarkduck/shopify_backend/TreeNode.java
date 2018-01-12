@@ -15,30 +15,23 @@ import java.util.List;
 
 public class TreeNode<T> implements Iterable<TreeNode<T>> {
 
-    public T data;
-    public TreeNode<T> parent;
-    public List<TreeNode<T>> children;
-
-    public boolean isRoot() {
-        return parent == null;
-    }
-
-    public boolean isLeaf() {
-        return children.size() == 0;
-    }
-
-    private List<TreeNode<T>> elementsIndex;
+    private T data;
+    private TreeNode<T> parent;
+    private TreeNode<T> leftChild;
+    private TreeNode<T> rightChild;
 
     public TreeNode(T data) {
         this.data = data;
-        this.children = new LinkedList<TreeNode<T>>();
-        this.elementsIndex = new LinkedList<TreeNode<T>>();
-        this.elementsIndex.add(this);
+        this.leftChild = new TreeNode<T>(null);
+        this.rightChild = new TreeNode<T>(null);
     }
 
     public TreeNode<T> addChild(T child) {
         TreeNode<T> childNode = new TreeNode<T>(child);
         childNode.parent = this;
+
+        if ()
+
         this.children.add(childNode);
         this.registerChildForSearch(childNode);
         return childNode;
@@ -87,7 +80,13 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         return false;
     }
 
+    public boolean isRoot() {
+        return parent == null;
+    }
 
+    public boolean isLeaf() {
+        return (leftChild == null && rightChild == null);
+    }
 
     @Override
     public String toString() {
@@ -99,6 +98,4 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         TreeNodeIter<T> iter = new TreeNodeIter<T>(this);
         return iter;
     }
-
-
 }
