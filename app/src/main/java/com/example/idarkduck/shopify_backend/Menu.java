@@ -12,6 +12,7 @@ public class Menu {
     String data;
     int parentID;
     ArrayList<Integer> childIDList;
+    ArrayList<String> childIDListString;
 
     Menu(String id, String data){
         this.id = id;
@@ -24,6 +25,13 @@ public class Menu {
         this.data = data;
         this.parentID = parentID;
         this.childIDList = childIDList;
+        makeString();
+    }
+    private void makeString(){
+        childIDListString = new ArrayList<>();
+        for(int i=0; i<childIDList.size() ; i++){
+            childIDListString.add(Integer.toString(childIDList.get(i)));
+        }
     }
 
     public String toString(){ String s="";
@@ -60,6 +68,9 @@ public class Menu {
     }
     protected ArrayList<Integer> getChildIDList(){
         return childIDList;
+    }
+    protected ArrayList<String> getChildIDListString(){
+        return childIDListString;
     }
     protected int getParentID() { return parentID; }
 }
