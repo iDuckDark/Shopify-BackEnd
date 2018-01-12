@@ -1,5 +1,8 @@
 package com.example.idarkduck.shopify_backend;
 
+import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
 /**
@@ -21,7 +24,7 @@ public class Validator {
         buildTree();
 
     }
-    public ArrayList<String> validMenus_ID(){
+    public ArrayList<String> getValidMenus_ID(){
         return validMenus_ID;
     }
     public ArrayList<String> getInvalidMenus_ID(){
@@ -30,8 +33,8 @@ public class Validator {
 
     private void buildTree(){
 
-        for(int i=0; i<menus.size(); i++){
-            if(treeNode==null || i==0){
+        for(int i=0; i<2; i++){
+            if( i==0 ){
                 treeNode = new TreeNode<>(menus.get(0).getStringId());
                 validMenus_ID.add(menus.get(0).getStringId());
             }
@@ -42,13 +45,14 @@ public class Validator {
                 }
                 else{
                     treeNode.addChild(menus.get(i).getStringId());
-                    validMenus_ID.add(menus.get(i).getStringId());
                     //add the child from id i
                     ArrayList<String> childList =menus.get(i).getChildIDListString();
                     for(int j=0; j<childList.size() ; j++){
                         if(!treeNode.searchTreeNode(childList.get(j))){
+                           // TextView test = findViewById(R.id.textView);
+                            //test.setText( test.getText() +" next " + childList.get(j) );
                             treeNode.addChild(childList.get(j));
-                            validMenus_ID.add(menus.get(0).getStringId());
+                            validMenus_ID.add(menus.get(j).getStringId());
                         }
                         else{
                             invalidMenus_ID.add(menus.get(j).getStringId());

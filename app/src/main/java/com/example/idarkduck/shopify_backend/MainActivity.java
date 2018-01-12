@@ -221,7 +221,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 loadingTextView.setVisibility(View.GONE);
                 test.setVisibility(View.VISIBLE);
 //                Validator v = new Validator(menus);
-//                test.setText(v.getInvalidMenus_ID().toString());
+//                String s = "invalid:" + v.getInvalidMenus_ID().toString() +'\n';
+//                s+= "valid:" + v.getValidMenus_ID().toString() +'\n';
+//                test.setText(s);
             }
         }
 
