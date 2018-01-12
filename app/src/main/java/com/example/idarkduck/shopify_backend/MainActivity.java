@@ -21,7 +21,7 @@ import java.util.Map;
 
 import okhttp3.OkHttpClient;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Runnable {
 
     String bodyResponse1;
     String bodyResponse2;
@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
         id = new ArrayList<>();
     }
 
-    private void find(){
+    // Validates graph on a thread.
+    public void run() {
 
     }
 
@@ -113,73 +114,103 @@ public class MainActivity extends AppCompatActivity {
         return arrBefore.replaceAll("\\[", "").replaceAll("\\]", "").replaceAll("\\s", "").split(",");
     }
 
-    private void validateGraph() {
-        Map<String, Integer> visited = new HashMap<>(menus.size());
-        Stack<Integer> itemsStack = new Stack<>();
-        ArrayList<Integer> childList = null;
+    private void validateGraphs() {
 
-        // Find first item with child.
+        ArrayList<Integer> roots = new ArrayList<>();
+
+
+        // Find all roots.
         for (int i = 0; i < menus.size(); i++) {
-            if (!menus.get(i).childIDList.isEmpty()) {
-                childList = menus.get(i).childIDList;
-                break;
-            }
+            // Check if root.
+            if (menus.get(i).getParentID() == -1)
+                roots.add(i);
         }
 
-        if (childList != null) {
-            int currentID = 0;
-            itemsStack.push(currentID);
+        System.out.print("roots: " + roots.size());
+        System.out.print("roots: " + roots.toString());
 
-            /*
-            // Push all children.
-            for (int i = 0; i < childList.size(); i++) {
-                itemsStack.push(Integer.parseInt(childList.get(i)));
-            }
-
-            visited.put(menus.get(currentID).getData(), 1);
-            */
-
-            // Check children
-            do {
-                currentID = itemsStack.pop();
-                // Initialize visited.
-                if (menus.size() < currentID || visited.get(menus.get(currentID)) == null)
-                    visited.put(menus.get(currentID).getData(), 0);
-
-                System.out.println("CID: " + currentID);
-
-                // Check if child was previously visited.
-                if (visited.get(menus.get(currentID).getData()) > 0) {
-                    // Invalid.
-                    setInvalidMenu(currentID);
-                    System.out.println("Invalid menu: " + currentID);
-                    break;
-                }
-
-                // Push all children.
-                childList = menus.get(currentID).childIDList;
-                System.out.println("CL: " + menus.get(currentID).toString());
-                System.out.println("CL: " + childList.toString());
-                for (int i = 0; i < childList.size(); i++) {
-
-                    System.out.println("CL: " + (childList.get(i)));
-                    itemsStack.push(childList.get(i) - 1);
-                }
-
-                System.out.println("stack size: " + itemsStack.size());
-                visited.put(menus.get(currentID).getData(), 1);
-            } while (!itemsStack.empty());
-        }
-
-        for (int i = 0; i < menus.size(); i++) {
-            System.out.println("item: " + menus.get(i).getData());
-            System.out.println("visited: " + visited.get(menus.get(i)));
+        // Validate each graph of the root.
+        for (int i = 0; i < roots.size(); i++) {
+            // https://stackoverflow.com/questions/877096/how-can-i-pass-a-parameter-to-a-java-thread
+            Runnable r = new ValidateGraphTask(roots.get(i));
+            new Thread(r).start();
         }
     }
 
     // Sets the menu of an item id invalid.
     private void setInvalidMenu(int id) {
 
+    }
+
+    // Executes worker thread to validate a graph.
+    private class ValidateGraphTask implements Runnable {
+        private int key = 0;
+
+        public ValidateGraphTask(int key) {
+            this.key = key;
+        }
+
+        @Override
+        public void run() {
+            android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
+
+            ArrayList<Integer> childList = null;
+            Map<String, Integer> visited = new HashMap<>(menus.size());
+            Stack<Integer> itemsStack = new Stack<>();
+
+
+            // Find first item with child.
+            for (int i = 0; i < menus.size(); i++) {
+                if (!menus.get(i).childIDList.isEmpty()) {
+                    childList = menus.get(i).childIDList;
+                    break;
+                }
+            }
+
+            if (childList != null) {
+                int currentID = 0;
+                itemsStack.push(currentID);
+
+                // Check children
+                do {
+                    currentID = itemsStack.pop();
+
+                    // Initialize visited.
+                    if (menus.size() < currentID || visited.get(menus.get(currentID)) == null)
+                        visited.put(menus.get(currentID).getData(), 0);
+
+                    System.out.println("CID: " + currentID);
+                    System.out.println("Visited: " + visited.get(menus.get(currentID).getData()));
+
+                    // Check if child was previously visited.
+                    if (visited.get(menus.get(currentID).getData()) > 0) {
+                        // Invalid.
+                        setInvalidMenu(currentID);
+                        System.out.println("Invalid menu: " + currentID);
+                        break;
+                    }
+
+                    // Push all children.
+                    childList = menus.get(currentID).childIDList;
+                    System.out.println("CL: " + menus.get(currentID).toString());
+                    System.out.println("CL: " + childList.toString());
+                    for (int i = 0; i < childList.size(); i++) {
+
+                        System.out.println("CL: " + (childList.get(i)));
+                        itemsStack.push(childList.get(i) - 1);
+                    }
+
+                    System.out.println("stack size: " + itemsStack.size());
+                    visited.put(menus.get(currentID).getData(), 1);
+                    System.out.println("Visited1: " + visited.get(menus.get(currentID).getData()));
+                } while (!itemsStack.empty());
+            }
+
+            for (int i = 0; i < menus.size(); i++) {
+                System.out.println("item: " + menus.get(i).getData());
+                System.out.println("visited: " + visited.get(menus.get(i)));
+            }
+        }
     }
 
     private class DownloadFilesTask extends AsyncTask<String, Integer, String> {
@@ -218,10 +249,12 @@ public class MainActivity extends AppCompatActivity {
                 readJson(bodyResponse2);
                 readJson(bodyResponse3);
                 test.setText(menus.toString());
+
+                validateGraphs();
+
                 progressBar.setVisibility(View.GONE);
                 loadingTextView.setVisibility(View.GONE);
                 test.setVisibility(View.VISIBLE);
-                //validateGraph();
             }
         }
 
