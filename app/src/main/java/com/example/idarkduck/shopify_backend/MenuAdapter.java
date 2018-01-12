@@ -56,8 +56,13 @@ public class MenuAdapter extends ArrayAdapter<Menu> {
         ImageView picture = convertView.findViewById(R.id.imgProduct);
         // Populate the data into the template view using the data object
         tvName.setText(menu.getData());
-        tvDescription.setText("Description: " + menu.getData());
+        if(menu.getChildIDList().size()==0){
+            tvDescription.setText("ID: " + menu.getId() + " Children ID: NULL " );
+        }else{
+            tvDescription.setText("ID: " + menu.getId() + " Children ID: " + menu.getChildIDList().toString());
+        }
 
+        picture.setImageResource(R.drawable.chair);
         //Picasso.with(this.context).load(product.getImage()).into(picture);
 
         //added to search the product names?
