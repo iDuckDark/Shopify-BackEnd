@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         loadingTextView = (TextView) findViewById(R.id.loadingTextView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         aSwitch = findViewById(R.id.challenge);
+        aSwitch.setVisibility(View.INVISIBLE);
 
         if (state == 2) {
             aSwitch.setChecked(true);
@@ -324,6 +325,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
                 progressBar.setVisibility(View.GONE);
                 loadingTextView.setVisibility(View.GONE);
+                aSwitch.setVisibility(View.VISIBLE);
                 //allItems.setMovementMethod(new ScrollingMovementMethod());
                 setMenuAdapter();
             }
