@@ -27,13 +27,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     OkHttpClient client;
     ResponseJson responseJson;
 
-    String bodyResponse1;
-    String bodyResponse2;
-    String bodyResponse3;
-
     String address = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=";
-    //String address2 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=2";
-    //String address3 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=3";
 
     ListView listView;
     TextView loadingTextView;
@@ -51,7 +45,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bodyResponse1="";
         client =  new OkHttpClient();
         responseJson = responseJson.getInstance();
         responseJson.clear();
