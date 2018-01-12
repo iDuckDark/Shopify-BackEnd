@@ -32,26 +32,26 @@ public class Validator {
 
         for(int i=0; i<menus.size(); i++){
             if(treeNode==null || i==0){
-                treeNode = new TreeNode<>(menus.get(0).getId());
-                validMenus_ID.add(menus.get(0).getId());
+                treeNode = new TreeNode<>(menus.get(0).getStringId());
+                validMenus_ID.add(menus.get(0).getStringId());
             }
             else{
                 //if contains
-                if(treeNode.searchTreeNode(menus.get(i).getId())){
-                    invalidMenus_ID.add(menus.get(i).getId());
+                if(treeNode.searchTreeNode(menus.get(i).getStringId())){
+                    invalidMenus_ID.add(menus.get(i).getStringId());
                 }
                 else{
-                    treeNode.addChild(menus.get(i).getId());
-                    validMenus_ID.add(menus.get(i).getId());
+                    treeNode.addChild(menus.get(i).getStringId());
+                    validMenus_ID.add(menus.get(i).getStringId());
                     //add the child from id i
                     ArrayList<String> childList =menus.get(i).getChildIDListString();
                     for(int j=0; j<childList.size() ; j++){
                         if(!treeNode.searchTreeNode(childList.get(j))){
                             treeNode.addChild(childList.get(j));
-                            validMenus_ID.add(menus.get(0).getId());
+                            validMenus_ID.add(menus.get(0).getStringId());
                         }
                         else{
-                            invalidMenus_ID.add(menus.get(j).getId());
+                            invalidMenus_ID.add(menus.get(j).getStringId());
                         }
                     }
                 }

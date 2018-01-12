@@ -256,8 +256,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 progressBar.setVisibility(View.GONE);
                 loadingTextView.setVisibility(View.GONE);
                 test.setVisibility(View.VISIBLE);
-                Validator v = new Validator(menus);
-                test.setText(v.getInvalidMenus_ID().toString());
+//                Validator v = new Validator(menus);
+//                test.setText(v.getInvalidMenus_ID().toString());
             }
         }
 

@@ -63,6 +63,9 @@ public class Menu {
     protected int getId(){
         return id;
     }
+    protected String getStringId(){
+        return Integer.toString(id);
+    }
     protected String getData(){
         return data;
     }
