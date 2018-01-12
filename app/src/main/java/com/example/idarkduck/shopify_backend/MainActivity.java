@@ -121,9 +121,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         System.out.println(roots.toString());
 
         // Validate each graph of the root.
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < roots.size(); i++) {
             // https://stackoverflow.com/questions/877096/how-can-i-pass-a-parameter-to-a-java-thread
-            Runnable r = new ValidateGraphTask(roots.get(1));
+            Runnable r = new ValidateGraphTask(roots.get(i));
             new Thread(r).start();
         }
     }
