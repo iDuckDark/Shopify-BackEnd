@@ -1,5 +1,8 @@
 package com.example.idarkduck.shopify_backend;
 
+import android.support.v7.app.AppCompatActivity;
+import android.widget.TextView;
+
 import java.util.ArrayList;
 
 /**
@@ -46,6 +49,8 @@ public class Validator {
                     ArrayList<String> childList =menus.get(i).getChildIDListString();
                     for(int j=0; j<childList.size() ; j++){
                         if(!treeNode.searchTreeNode(childList.get(j))){
+                           // TextView test = findViewById(R.id.textView);
+                            //test.setText( test.getText() +" next " + childList.get(j) );
                             treeNode.addChild(childList.get(j));
                             validMenus_ID.add(menus.get(j).getStringId());
                         }

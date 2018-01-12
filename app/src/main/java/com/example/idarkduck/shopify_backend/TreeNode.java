@@ -1,5 +1,7 @@
 package com.example.idarkduck.shopify_backend;
 
+import android.support.annotation.NonNull;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -75,6 +77,18 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         return false;
     }
 
+    public boolean searchTreeNode2(T searching) {
+        for (TreeNode<T> element : this.elementsIndex) {
+            T elData = element.data;
+            if ( searching == elData)  {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
     @Override
     public String toString() {
         return data != null ? data.toString() : "[data null]";
@@ -85,5 +99,6 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
         TreeNodeIter<T> iter = new TreeNodeIter<T>(this);
         return iter;
     }
+
 
 }
