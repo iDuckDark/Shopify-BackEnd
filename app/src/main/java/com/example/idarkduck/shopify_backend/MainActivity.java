@@ -3,6 +3,7 @@ package com.example.idarkduck.shopify_backend;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -239,6 +240,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 loadingTextView.setVisibility(View.GONE);
                 allItems.setVisibility(View.VISIBLE);
                 answer.setVisibility(View.VISIBLE);
+                allItems.setMovementMethod(new ScrollingMovementMethod());
             }
         }
 
