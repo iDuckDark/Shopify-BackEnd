@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         bodyResponse1="";
         client =  new OkHttpClient();
-        allItems = (TextView) findViewById(R.id.all);
+        answer = (TextView) findViewById(R.id.answer);
         allItems = (TextView) findViewById(R.id.all);
         loadingTextView = (TextView) findViewById(R.id.loadingTextView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
