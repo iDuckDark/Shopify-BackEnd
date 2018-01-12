@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,9 +35,12 @@ public class MainActivity extends AppCompatActivity {
     OkHttpClient client;
 
     TextView test;
+    TextView loadingTextView;
 
     ArrayList<String> id;
     ArrayList<Menu> menus;
+
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         bodyResponse1="";
         client =  new OkHttpClient();
         test = (TextView) findViewById(R.id.textView);
+        loadingTextView = (TextView) findViewById(R.id.loadingTextView);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         DownloadFilesTask download = new DownloadFilesTask();
         download.execute(address1);
@@ -198,8 +204,8 @@ public class MainActivity extends AppCompatActivity {
         //Maybe need to be implemented to avoid crashes
         protected void onProgressUpdate(Integer... progress) {
             super.onProgressUpdate(progress);
-            //test.setText(" Loading ... ");
-            //progressBar.setProgress(progress[0]);
+            test.setText(" Loading ... ");
+            progressBar.setProgress(progress[0]);
             //setProgressPercent(progress[0]);
         }
 
@@ -212,14 +218,17 @@ public class MainActivity extends AppCompatActivity {
                 readJson(bodyResponse2);
                 readJson(bodyResponse3);
                 test.setText(menus.toString());
-                validateGraph();
+                progressBar.setVisibility(View.GONE);
+                loadingTextView.setVisibility(View.GONE);
+                test.setVisibility(View.VISIBLE);
+                //validateGraph();
             }
         }
 
         //not needed actually but who knows
         protected void onPreExcecute() {
             super.onPreExecute();
-            //progressBar.setMax(100);
+            progressBar.setMax(100);
         }
     }
 }
