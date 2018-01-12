@@ -67,12 +67,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
             JSONArray arr = jsonObj.getJSONArray("menus");
 
-
             for (int i = 0; i < arr.length(); i++) {
                 //create entire object of JSON file at index i
                 JSONObject o = arr.getJSONObject(i);
                 //find the keys associated
-                String ID = o.getString("id");
+                int id = o.getInt("id");
                 String data = o.getString("data");
                 int parentID = -1;
 
@@ -95,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 }
 
                 // Update menu.
-                Menu newMenu = new Menu(ID, data, parentID, childList);
+                Menu newMenu = new Menu(id, data, parentID, childList);
                 menus.add(newMenu);
             }
         }
@@ -198,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     // Check if child was previously visited.
                     if (visited[currentID] > 0) {
                         // Invalid.
-                        json.setInvalidMenu(findMenu(currentID));
+                        json.addInvalidMenu(findMenu(currentID));
                         return;
                     }
 
@@ -210,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
                     visited[currentID]++;
                 } while (!itemsStack.empty());
-                json.setValidMenu(findMenu(currentID));
+                json.addValidMenu(findMenu(currentID));
             }
         }
     }
