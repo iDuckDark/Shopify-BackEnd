@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     String address2 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=2";
     String address3 = "https://backend-challenge-summer-2018.herokuapp.com/challenges.json?id=1&page=3";
 
+    TextView tv1;
+    TextView tv2;
+
     TextView answer;
     TextView allItems;
     TextView loadingTextView;
@@ -48,8 +51,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         bodyResponse1="";
         client =  new OkHttpClient();
         responseJson = responseJson.getInstance();
+
         answer = (TextView) findViewById(R.id.answer);
         allItems = (TextView) findViewById(R.id.all);
+
+        tv1= (TextView) findViewById(R.id.textView1);
+        tv2= (TextView) findViewById(R.id.textView2);
+
         loadingTextView = (TextView) findViewById(R.id.loadingTextView);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
@@ -249,8 +257,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 loadingTextView.setVisibility(View.GONE);
                 allItems.setVisibility(View.VISIBLE);
                 answer.setVisibility(View.VISIBLE);
-                allItems.setMovementMethod(new ScrollingMovementMethod());
+                //allItems.setMovementMethod(new ScrollingMovementMethod());
                 setMenuAdapter();
+
+                allItems.setVisibility(View.INVISIBLE);
+                answer.setVisibility(View.INVISIBLE);
+                tv1.setVisibility(View.INVISIBLE);
+                tv2.setVisibility(View.INVISIBLE);
             }
         }
 
